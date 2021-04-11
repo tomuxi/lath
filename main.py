@@ -7,15 +7,16 @@ import socket
 import selectors
 from session import Session
 
+VERSION = b'v0.0.1'
 scheduler = selectors.DefaultSelector()
 
 def srv_accept(sock, event):
-    '''Accept a new connection and create session'''
+    '''Accept a new connection and create a session for it'''
     del event
     cli_sock, cli_addr = sock.accept()
     print('accepted', cli_sock, 'from', cli_addr)
     cli_sock.setblocking(False)
-    sess = Session(scheduler, cli_sock, cli_addr)
+    sess = Session(scheduler, cli_sock, cli_addr, VERSION)
     scheduler.register(cli_sock, selectors.EVENT_READ, sess)
 
 def lath(addr, port):

@@ -9,12 +9,12 @@ from response import Response
 
 class Session:
     '''Session for a spefific client attempting HTTP request'''
-    def __init__(self, scheduler, sock, addr, lath_version):
+    def __init__(self, scheduler, sock, addr, version):
         self.scheduler = scheduler
         self.cli_sock = sock
         self.cli_addr = addr
         self.responded = False
-        self.version = lath_version
+        self.lath_version = version
         self.parser = Parser(self.respond)
         self.request = Request(self.parser)
 
@@ -32,7 +32,7 @@ class Session:
         '''Respond to a HTTP request'''
         body = b"<html><body>Response</body></html>\r\n"
         resp = Response(self.parser.version)
-        resp.add_header(b"Server", b"lath" + b" " + self.version)
+        resp.add_header(b"Server", b"lath" + b"/" + self.lath_version)
         resp.add_header(b"Date", datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S GMT").encode())
         self.cli_sock.send(resp.gen(body))
         print("responded.")

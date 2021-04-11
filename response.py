@@ -14,7 +14,9 @@ class Response:
 
     def gen_status(self):
         '''Generate the status line in a response'''
-        return self.version + b" " + str(self.code).encode() + b" " + PHRASE[self.code].encode() + b"\r\n"
+        return self.version + b" " + \
+            str(self.code).encode() + b" " + \
+            PHRASE[self.code].encode() + b"\r\n"
 
     def add_header(self, name: bytes, value: bytes):
         '''Add one header name-value pair into a response headers'''
@@ -28,4 +30,6 @@ class Response:
         '''Generate response as string'''
         if body:
             self.headers.append((b"Content-Length", str(len(body)).encode("utf-8")))
-        return b"".join([self.gen_status(), self.gen_headers(), b"\r\n" if body else b"", body])
+        return b"".join(
+            [self.gen_status(), self.gen_headers(), b"\r\n" if body else b"", body]
+        )

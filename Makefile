@@ -7,11 +7,8 @@
 # - make run to run
 
 .PHONY: lint
-lint: $(patsubst %.py,%.pylint,$(wildcard *.py))
-
-%.pylint: %.py
-	pylint $^
-	touch $@
+lint:
+	pylint *.py
 
 .PHONY: test
 test: test.py
@@ -23,4 +20,4 @@ run: main.py
 
 .PHONY: clean
 clean:
-	-rm -fr __pycache__ *.pylint *~
+	-rm -fr __pycache__ *~
