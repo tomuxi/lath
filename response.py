@@ -6,10 +6,10 @@ from status import PHRASE
 
 class Response:
     '''Class for generating HTTP responses'''
-    def __init__(self, code = 200):
+    def __init__(self, version, code = 200):
         '''Initialization'''
         self.code = code
-        self.version = b"HTTP/1.1"
+        self.version = version
         self.headers = []
 
     def gen_status(self):

@@ -7,17 +7,17 @@ class Method:
     def __init__(self, name):
         self.name = name
 
-class TRACE(Method):
+class Trace(Method):
     '''Class for HTTP protocol method TRACE'''
     def __init__(self):
         super().__init__('TRACE')
 
-class OPTIONS(Method):
+class Options(Method):
     '''Class for HTTP protocol method OPTIONS'''
     def __init__(self):
         super().__init__('OPTIONS')
 
-class GET(Method):
+class Get(Method):
     '''Class for HTTP protocol method GET'''
     def __init__(self):
         super().__init__('GET')

@@ -30,7 +30,7 @@ class Session:
     def respond(self):
         '''Respond to a HTTP request'''
         body = b"<html><body>Response</body></html>\r\n"
-        resp = Response()
+        resp = Response(self.parser.version)
         resp.add_header(b"Server", b"lat-httpd")
         resp.add_header(b"Date", datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S GMT").encode())
         self.cli_sock.send(resp.gen(body))

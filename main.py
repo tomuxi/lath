@@ -5,7 +5,7 @@
 import sys
 import socket
 import selectors
-import session
+from session import Session
 
 scheduler = selectors.DefaultSelector()
 
@@ -15,7 +15,7 @@ def srv_accept(sock, event):
     cli_sock, cli_addr = sock.accept()
     print('accepted', cli_sock, 'from', cli_addr)
     cli_sock.setblocking(False)
-    sess = session.Session(scheduler, cli_sock, cli_addr)
+    sess = Session(scheduler, cli_sock, cli_addr)
     scheduler.register(cli_sock, selectors.EVENT_READ, sess)
 
 def lath(addr, port):
