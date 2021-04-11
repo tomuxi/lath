@@ -27,6 +27,7 @@ class Session:
         else:
             print('closing', self.cli_sock)
             self.scheduler.unregister(self.cli_sock)
+            self.cli_sock.close()
 
     def respond(self):
         '''Respond to a HTTP request'''
