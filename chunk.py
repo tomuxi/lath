@@ -16,9 +16,9 @@ class Chunk:
         front, *tail = self.data.split(separator, maxsplit=1)
         if not tail:
             return None
-        else:
-            self.data = separator.join(tail)
-            return front
+
+        self.data = separator.join(tail)
+        return front
 
     def pop_all(self):
         '''Take all data from the buffer'''

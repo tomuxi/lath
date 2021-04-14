@@ -16,7 +16,7 @@ def srv_accept(sock, event):
     cli_sock, cli_addr = sock.accept()
     print('accepted', cli_sock, 'from', cli_addr)
     cli_sock.setblocking(False)
-    sess = Session(scheduler, cli_sock, cli_addr, VERSION)
+    sess = Session(cli_sock, cli_addr, VERSION)
     scheduler.register(cli_sock, selectors.EVENT_READ, sess)
 
 def lath(addr, port):
@@ -36,7 +36,10 @@ def lath(addr, port):
             if not sess:
                 srv_accept(key.fileobj, mask)
             else:
-                sess.read_request(mask)
+                if not sess.read_request(mask):
+                    scheduler.unregister(sess.cli_sock)
+                    sess.cli_sock.close()
+                    del sess
 
 if len(sys.argv) > 3:
     print('Usage:', sys.argv[0], '[address] [port]')

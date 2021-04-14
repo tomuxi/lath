@@ -2,7 +2,12 @@
 
    Tom Söderlund <tom.soderlund@iki.fi> 2021-04-11'''
 
+import socket
+from time import sleep
+from random import randint
 from chunk import Chunk
+from parser import Parser
+from request import Request
 
 def test_chunk():
     '''Test the separator based FIFO chunk buffer'''
@@ -20,9 +25,6 @@ def test_chunk():
     assert fifo.pop(separator=b"-") is None
     assert fifo.pop_all() == b"again"
 
-from parser import Parser
-from request import Request
-
 def test_parser_easy():
     '''Test the parser mechanism'''
     parse = Parser()
@@ -38,9 +40,6 @@ def test_parser_easy():
         (b"Accept", b"*/*")
     ]
     assert parse.body == b""
-
-from time import sleep
-from random import randint
 
 def test_parser_hard():
     '''Test the parser mechanisms with incoherently chunky input'''
@@ -60,7 +59,7 @@ def test_parser_hard():
     for data in blobs:
         req.push(data)
         sleep(randint(1,3))
-        
+
     assert parse.method == b"GET"
     assert parse.url == b"/foo.html"
     assert parse.version == b"HTTP/1.1"
@@ -72,13 +71,14 @@ def test_parser_hard():
     assert parse.body == b""
 
 def test_server():
+    '''Test the server over actual network connection'''
     sock = socket.socket()
     sock.connect(("localhost", 51551))
     data = b"GET /foo.html HTTP/1.1\r\nHost: ip6-localhost:51551\r\nUser-Agent: curl/7.61.1\r\nAccept: */*\r\n\r\n"
     sock.sendall(data)
     data = sock.recv(4096)
     assert data.startswith(b"HTTP/1.1 200 OK")
-    
+
 if __name__ == "__main__":
     test_chunk()
     test_parser_easy()

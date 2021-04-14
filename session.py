@@ -9,8 +9,7 @@ from response import Response
 
 class Session:
     '''Session for a spefific client attempting HTTP request'''
-    def __init__(self, scheduler, sock, addr, version):
-        self.scheduler = scheduler
+    def __init__(self, sock, addr, version):
         self.cli_sock = sock
         self.cli_addr = addr
         self.responded = False
@@ -21,13 +20,12 @@ class Session:
     def read_request(self, event):
         '''Attemt to gather the request in small chunks'''
         del event
-        data = self.cli_sock.recv(4096)
+        data = self.cli_sock.recv(1024)
         if data:
             self.request.push(data)
-        else:
-            print('closing', self.cli_sock)
-            self.scheduler.unregister(self.cli_sock)
-            self.cli_sock.close()
+            return True
+        print('closing', self.cli_sock)
+        return False
 
     def respond(self):
         '''Respond to a HTTP request'''
