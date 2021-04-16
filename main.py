@@ -36,7 +36,7 @@ def lath(addr, port):
             if not sess:
                 srv_accept(key.fileobj, mask)
             else:
-                if not sess.read_request(mask):
+                if not sess.read_request(mask) or sess.responded:
                     scheduler.unregister(sess.cli_sock)
                     sess.cli_sock.close()
                     del sess
